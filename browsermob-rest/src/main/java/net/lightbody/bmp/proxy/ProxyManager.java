@@ -156,7 +156,7 @@ public class ProxyManager {
             String proxyUsername = options.remove("proxyUsername");
             String proxyPassword = options.remove("proxyPassword");
             if (proxyUsername != null && proxyPassword != null) {
-                ((BrowserMobProxy) proxy).chainedProxyAuthorization(proxyUsername, proxyPassword, AuthType.BASIC);
+                ((BrowserMobProxy) proxy).chainedProxyAuthorization(proxyUsername, proxyPassword, AuthType.BASIC);  // Might need to add more auth types (browsermob-core/src/main/java/net/lightbody/bmp/BrowserMobProxyServer.java > chainedProxyAuthorization)
             }
 
             LOG.debug("Apply options `{}` to new ProxyServer...", options);

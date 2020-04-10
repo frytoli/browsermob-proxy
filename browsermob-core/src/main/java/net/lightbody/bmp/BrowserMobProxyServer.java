@@ -48,6 +48,7 @@ import net.lightbody.bmp.util.BrowserMobProxyUtil;
 import org.littleshoot.proxy.ChainedProxy;
 import org.littleshoot.proxy.ChainedProxyAdapter;
 import org.littleshoot.proxy.ChainedProxyManager;
+import org.littleshoot.proxy.ChainedProxyType;
 import org.littleshoot.proxy.HttpFilters;
 import org.littleshoot.proxy.HttpFiltersSource;
 import org.littleshoot.proxy.HttpFiltersSourceAdapter;
@@ -332,7 +333,7 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
 
         if (chainedProxyManager != null) {
             bootstrap.withChainProxyManager(chainedProxyManager);
-        } else if (upstreamProxyAddress != null) {
+        } else if ((upstreamProxyAddress != null) && (upstreamProxyType != null)) {
             // indicate that the proxy was bootstrapped with the default chained proxy manager, which allows changing the
             // chained proxy after the proxy is started.
             bootstrappedWithDefaultChainedProxy.set(true);
@@ -344,6 +345,9 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                     if (upstreamProxy != null) {
                         chainedProxies.add(new ChainedProxyAdapter() {
                             @Override
+                            public ChainedProxyType getChainedProxyType() {
+                                return upstreamProxyType;
+                            }
                             public InetSocketAddress getChainedProxyAddress() {
                                 return upstreamProxy;
                             }
@@ -872,15 +876,31 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
      * <b>Note:</b> Using {@link #setChainedProxyManager(ChainedProxyManager)} will supersede any value set by this method. A chained
      * proxy must be set before the proxy is started, though it can be changed after the proxy is started.
      *
+     * @param upstreamProxyType type of the upstream proxy (HTTP, SOCKS4, SOCKS5)
      * @param chainedProxyAddress address of the upstream proxy
      */
     @Override
-    public void setChainedProxy(InetSocketAddress chainedProxyAddress) {
+    public void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress) {
         if (isStarted() && !bootstrappedWithDefaultChainedProxy.get()) {
             throw new IllegalStateException("Cannot set a chained proxy after the proxy is started if the proxy was started without a chained proxy.");
         }
 
         upstreamProxyAddress = chainedProxyAddress;
+
+        // ***
+        switch (chainedProxyType) {
+            case "httpProxy":
+                upstreamProxyType = ChainedProxyType.HTTP;
+                break;
+            case "socks4Proxy":
+                upstreamProxyType = ChainedProxyType.SOCKS4;
+                break;
+            case "socks5Proxy":
+                upstreamProxyType = ChainedProxyType.SOCKS5;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

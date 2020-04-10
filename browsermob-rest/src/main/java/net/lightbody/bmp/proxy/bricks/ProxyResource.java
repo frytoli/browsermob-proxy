@@ -72,19 +72,43 @@ public class ProxyResource {
 
     @Post
     public Reply<?> newProxy(Request<String> request) {
-        String systemProxyHost = System.getProperty("http.proxyHost");
-        String systemProxyPort = System.getProperty("http.proxyPort");
+        String systemHttpProxyHost = System.getProperty("http.proxyHost");  // ***
+        String systemHttpProxyPort = System.getProperty("http.proxyPort");  // ***
         String httpProxy = request.param("httpProxy");
         String proxyUsername = request.param("proxyUsername");
         String proxyPassword = request.param("proxyPassword");
 
+        // ***
+        String systemSocks4ProxyHost = System.getProperty("socks4.proxyHost");
+        String systemSocks4ProxyPort = System.getProperty("socks4.proxyPort");
+        String socks4Proxy = request.param("socks4Proxy");
+        String systemSocks5ProxyHost = System.getProperty("socks5.proxyHost");
+        String systemSocks5ProxyPort = System.getProperty("socks5.proxyPort");
+        String socks5Proxy = request.param("socks5Proxy");
+        // ***
+
         Hashtable<String, String> options = new Hashtable<String, String>();
 
+        // *** If more than one protocol is specified, default to http, socks4, socks5
         // If the upstream proxy is specified via query params that should override any default system level proxy.
         if (httpProxy != null) {
-            options.put("httpProxy", httpProxy);
-        } else if ((systemProxyHost != null) && (systemProxyPort != null)) {
-            options.put("httpProxy", String.format("%s:%s", systemProxyHost, systemProxyPort));
+            options.put("proxyType", "httpProxy");
+            options.put("proxyAddress", httpProxy);
+        } else if ((systemHttpProxyHost != null) && (systemHttpProxyPort != null)) {
+            options.put("proxyType", "httpProxy");
+            options.put("proxyAddress", String.format("%s:%s", systemHttpProxyHost, systemHttpProxyPort));
+        } else if (socks4Proxy != null) {
+            options.put("proxyType", "socks4Proxy");
+            options.put("proxyAddress", socks4Proxy);
+        } else if ((systemSocks4ProxyHost != null) && (systemSocks4ProxyPort != null) {
+            options.put("proxyType", "socks4Proxy");
+            options.put("proxyAddress", String.format("%s:%s", systemSocks4ProxyHost, systemSocks4ProxyPort));
+        } else if (socks5Proxy != null) {
+            options.put("proxyType", "socks5Proxy");
+            options.put("proxyAddress", socks5Proxy);
+        } else if ((systemSocks5ProxyHost != null) && (systemSocks5ProxyPort != null) {
+            options.put("proxyType", "socks5Proxy");
+            options.put("proxyAddress", String.format("%s:%s", systemSocks5ProxyHost, systemSocks5ProxyPort));
         }
 
         // this is a short-term work-around for Proxy Auth in the REST API until the upcoming REST API refactor
