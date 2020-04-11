@@ -49,7 +49,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>xyz.rogfam</groupId>
+            <groupId>net.lightbody.bmp</groupId>
             <artifactId>littleproxy</artifactId>
             <exclusions>
                 <exclusion>
