@@ -347,11 +347,12 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                 @Override
                 public void lookupChainedProxies(HttpRequest httpRequest, Queue<ChainedProxy> chainedProxies) {
                     final InetSocketAddress upstreamProxy = upstreamProxyAddress;
-                    if (upstreamProxy != null) {
+                    final ChainedProxyType upstreamType = upstreamProxyType;
+                    if ((upstreamProxy != null) && (upstreamType != null)) {
                         chainedProxies.add(new ChainedProxyAdapter() {
                             @Override
                             public ChainedProxyType getChainedProxyType() {
-                                return upstreamProxyType;
+                                return upstreamType;
                             }
                             public InetSocketAddress getChainedProxyAddress() {
                                 return upstreamProxy;
@@ -915,7 +916,7 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
 
     /**
      * Allows access to the LittleProxy {@link ChainedProxyManager} for fine-grained control of the chained proxies. To enable a single
-     * chained proxy, {@link BrowserMobProxy#setChainedProxy(InetSocketAddress)} is generally more convenient.
+     * chained proxy, {@link BrowserMobProxy#setChainedProxy(String, InetSocketAddress)} is generally more convenient.
      *
      * <b>Note:</b> The chained proxy manager must be enabled before calling {@link #start()}.
      *
