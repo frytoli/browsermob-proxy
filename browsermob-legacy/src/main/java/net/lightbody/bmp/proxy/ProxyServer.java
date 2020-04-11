@@ -99,7 +99,7 @@ public class ProxyServer implements LegacyProxyServer, BrowserMobProxy {
     private boolean started;
 
     private InetSocketAddress chainedProxyAddress;
-    private ChainedProxyType chainedProxyType;
+    private String chainedProxyType;
 
     public ProxyServer() {
     }
