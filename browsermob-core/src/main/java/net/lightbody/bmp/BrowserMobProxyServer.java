@@ -211,6 +211,11 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
     private volatile InetSocketAddress upstreamProxyAddress;
 
     /**
+     * The type (HTTP, SOCKS4, SOCKS5) of an upstream chained proxy to route traffic through.
+     */
+     private volatile ChainedProxyType upstreamProxyType;
+
+    /**
      * The chained proxy manager that manages upstream proxies.
      */
     private volatile ChainedProxyManager chainedProxyManager;
