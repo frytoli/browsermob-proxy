@@ -832,7 +832,7 @@ public class ProxyServer implements LegacyProxyServer, BrowserMobProxy {
     @Override
     public void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress) {
         this.chainedProxyAddress = chainedProxyAddress;
-        this.chainedProxyType = chaineProxyType;
+        this.chainedProxyType = chainedProxyType;
         client.setHttpProxy(chainedProxyAddress.getHostString() + ":" + chainedProxyAddress.getPort());
     }
 
