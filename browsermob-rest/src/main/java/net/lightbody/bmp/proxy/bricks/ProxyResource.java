@@ -100,13 +100,13 @@ public class ProxyResource {
         } else if (socks4Proxy != null) {
             options.put("proxyType", "socks4Proxy");
             options.put("proxyAddress", socks4Proxy);
-        } else if ((systemSocks4ProxyHost != null) && (systemSocks4ProxyPort != null) {
+        } else if ((systemSocks4ProxyHost != null) && (systemSocks4ProxyPort != null)) {
             options.put("proxyType", "socks4Proxy");
             options.put("proxyAddress", String.format("%s:%s", systemSocks4ProxyHost, systemSocks4ProxyPort));
         } else if (socks5Proxy != null) {
             options.put("proxyType", "socks5Proxy");
             options.put("proxyAddress", socks5Proxy);
-        } else if ((systemSocks5ProxyHost != null) && (systemSocks5ProxyPort != null) {
+        } else if ((systemSocks5ProxyHost != null) && (systemSocks5ProxyPort != null)) {
             options.put("proxyType", "socks5Proxy");
             options.put("proxyAddress", String.format("%s:%s", systemSocks5ProxyHost, systemSocks5ProxyPort));
         }
