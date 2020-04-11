@@ -1,6 +1,6 @@
 // ========================================================================
 // Author : Gosta Jonasson
-// Copyright (c) 2002 Gösta Jonasson gosta@kth.se. All rights reserved.
+// Copyright (c) 2002 Gosta Jonasson gosta@kth.se. All rights reserved.
 // Permission to use, copy, modify and distribute this software
 // for non-commercial or commercial purposes and without fee is
 // hereby granted provided that this copyright notice appears in
