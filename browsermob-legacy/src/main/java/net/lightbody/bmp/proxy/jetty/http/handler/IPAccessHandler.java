@@ -37,9 +37,9 @@ import java.util.Hashtable;
  * <br>
  * This would deny access for everyone except the requests from the IPs 192.168.0.100 and
  * 192.168.0.103.
- * 
+ *
  * @version v0.1 2002/03/20
- * @author Gösta Jonasson <a href="mailto:gosta@kth.se">gosta@kth.se </a>
+ * @author Gosta Jonasson <a href="mailto:gosta@kth.se">gosta@kth.se </a>
  */
 public class IPAccessHandler extends AbstractHttpHandler
 {
@@ -61,7 +61,7 @@ public class IPAccessHandler extends AbstractHttpHandler
 
     /**
      * Checks if the given ipstring (x.x.x.x) is authorized or not
-     * 
+     *
      * @param ipstring The ip-address as a String
      * @return True if the IP is allowed access, otherwise false.
      */
@@ -80,7 +80,7 @@ public class IPAccessHandler extends AbstractHttpHandler
 
     /**
      * Handles the incoming request
-     * 
+     *
      * @param pathInContext
      * @param pathParams
      * @param request The incoming HTTP-request
@@ -123,7 +123,7 @@ public class IPAccessHandler extends AbstractHttpHandler
 
     /**
      * Allow the given ip-address access
-     * 
+     *
      * @param ipstring The ip-address as a String on the format "x.x.x.x"
      */
     public void setAllowIP(String ipstring)
@@ -133,7 +133,7 @@ public class IPAccessHandler extends AbstractHttpHandler
 
     /**
      * Deny the given ip-address access
-     * 
+     *
      * @param ipstring The ip-address as a String on the format "x.x.x.x"
      */
     public void setDenyIP(String ipstring)
@@ -143,7 +143,7 @@ public class IPAccessHandler extends AbstractHttpHandler
 
     /**
      * Set the standard action beeing taken when not registred IPs wants access
-     * 
+     *
      * @param s The standard-string (either 'allow' or 'deny')
      */
     public void setStandard(String s)
@@ -161,7 +161,7 @@ public class IPAccessHandler extends AbstractHttpHandler
 
     /**
      * Main method for testing & debugging.
-     *  
+     *
      */
     private static void main(String[] args)
     {

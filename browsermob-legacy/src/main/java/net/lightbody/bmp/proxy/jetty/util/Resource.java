@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at 
+// You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,7 @@ import java.util.Date;
 /** Abstract resource class.
  *
  * @version $Id: Resource.java,v 1.31 2005/10/21 11:36:56 gregwilkins Exp $
- * @author Nuno Preguiça
+ * @author Nuno Preguica
  * @author Greg Wilkins (gregw)
  */
 public abstract class Resource implements Serializable
@@ -38,7 +38,7 @@ public abstract class Resource implements Serializable
     private static Log log = LogFactory.getLog(Resource.class);
 
     Object _associate;
-    
+
     /* ------------------------------------------------------------ */
     /** Construct a resource from a url.
      * @param url A URL.
@@ -101,10 +101,10 @@ public abstract class Resource implements Serializable
                     // It's a file.
                     if (resource.startsWith("./"))
                         resource=resource.substring(2);
-                    
+
                     File file=new File(resource).getCanonicalFile();
-                    url=file.toURI().toURL();                    
-                    
+                    url=file.toURI().toURL();
+
                     URLConnection connection=url.openConnection();
                     FileResource fileResource= new FileResource(url,connection,file);
                     return fileResource;
@@ -168,17 +168,17 @@ public abstract class Resource implements Serializable
                     url=loader.getResource(resource.substring(1));
             }
         }
-        
+
         if (url==null)
         {
             url=ClassLoader.getSystemResource(resource);
             if (url==null && resource.startsWith("/"))
                 url=loader.getResource(resource.substring(1));
         }
-        
+
         if (url==null)
             return null;
-        
+
         return newResource(url);
     }
 
@@ -192,14 +192,14 @@ public abstract class Resource implements Serializable
     /** Release any resources held by the resource.
      */
     public abstract void release();
-    
+
 
     /* ------------------------------------------------------------ */
     /**
      * Returns true if the respresened resource exists.
      */
     public abstract boolean exists();
-    
+
 
     /* ------------------------------------------------------------ */
     /**
@@ -221,14 +221,14 @@ public abstract class Resource implements Serializable
      * Return the length of the resource
      */
     public abstract long length();
-    
+
 
     /* ------------------------------------------------------------ */
     /**
      * Returns an URL representing the given resource
      */
     public abstract URL getURL();
-    
+
 
     /* ------------------------------------------------------------ */
     /**
@@ -237,14 +237,14 @@ public abstract class Resource implements Serializable
      */
     public abstract File getFile()
         throws IOException;
-    
+
 
     /* ------------------------------------------------------------ */
     /**
      * Returns the name of the resource
      */
     public abstract String getName();
-    
+
 
     /* ------------------------------------------------------------ */
     /**
@@ -259,21 +259,21 @@ public abstract class Resource implements Serializable
      */
     public abstract OutputStream getOutputStream()
         throws java.io.IOException, SecurityException;
-    
+
     /* ------------------------------------------------------------ */
     /**
      * Deletes the given resource
      */
     public abstract boolean delete()
         throws SecurityException;
-    
+
     /* ------------------------------------------------------------ */
     /**
      * Rename the given resource
      */
     public abstract boolean renameTo( Resource dest)
         throws SecurityException;
-    
+
     /* ------------------------------------------------------------ */
     /**
      * Returns a list of resource names contained in the given resource
@@ -286,24 +286,24 @@ public abstract class Resource implements Serializable
      * Returns the resource contained inside the current resource with the
      * given name.
      * @param path The path segment to add, which should be encoded by the
-     * encode method. 
+     * encode method.
      */
     public abstract Resource addPath(String path)
         throws IOException,MalformedURLException;
-    
+
 
     /* ------------------------------------------------------------ */
     /** Encode according to this resource type.
      * The default implementation calls URI.encodePath(uri)
-     * @param uri 
+     * @param uri
      * @return String encoded for this resource type.
      */
     public String encode(String uri)
     {
         return URI.encodePath(uri);
     }
-    
-        
+
+
     /* ------------------------------------------------------------ */
     public Object getAssociate()
     {
@@ -315,7 +315,7 @@ public abstract class Resource implements Serializable
     {
         _associate=o;
     }
-    
+
     /* ------------------------------------------------------------ */
     /**
      * @return The canonical Alias of this resource or null if none.
@@ -324,7 +324,7 @@ public abstract class Resource implements Serializable
     {
         return null;
     }
-    
+
 
     /* ------------------------------------------------------------ */
     public CachedResource cache()
@@ -332,7 +332,7 @@ public abstract class Resource implements Serializable
     {
         return new CachedResource(this);
     }
-    
+
     /* ------------------------------------------------------------ */
     /** Get the resource list as a HTML directory listing.
      * @param base The base URL
@@ -345,13 +345,13 @@ public abstract class Resource implements Serializable
     {
         if (!isDirectory())
             return null;
-        
-      
+
+
         String[] ls = list();
         if (ls==null)
             return null;
         Arrays.sort(ls);
-        
+
         String title = "Directory: "+URI.decodePath(base);
         title=StringUtil.replace(StringUtil.replace(title,"<","&lt;"),">","&gt;");
         StringBuffer buf=new StringBuffer(4096);
@@ -360,25 +360,25 @@ public abstract class Resource implements Serializable
         buf.append("</TITLE></HEAD><BODY>\n<H1>");
         buf.append(title);
         buf.append("</H1><TABLE BORDER=0>");
-        
+
         if (parent)
         {
             buf.append("<TR><TD><A HREF=");
             buf.append(URI.encodePath(URI.addPaths(base,"../")));
             buf.append(">Parent Directory</A></TD><TD></TD><TD></TD></TR>\n");
         }
-        
+
         DateFormat dfmt=DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
                                                        DateFormat.MEDIUM);
         for (int i=0 ; i< ls.length ; i++)
-        {   
+        {
             String encoded=URI.encodePath(ls[i]);
             Resource item = addPath(encoded);
-            
+
             buf.append("<TR><TD><A HREF=\"");
-            
+
             String path=URI.addPaths(base,encoded);
-            
+
             if (item.isDirectory() && !path.endsWith("/"))
                 path=URI.addPaths(path,"/");
             buf.append(path);
@@ -393,13 +393,13 @@ public abstract class Resource implements Serializable
         }
         buf.append("</TABLE>\n");
 	buf.append("</BODY></HTML>\n");
-        
+
         return buf.toString();
     }
-    
+
     /* ------------------------------------------------------------ */
-    /** 
-     * @param out 
+    /**
+     * @param out
      * @param start First byte to write
      * @param count Bytes to write or -1 for all of them.
      */
@@ -419,5 +419,5 @@ public abstract class Resource implements Serializable
         {
             in.close();
         }
-    }    
+    }
 }

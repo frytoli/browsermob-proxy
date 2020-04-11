@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at 
+// You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,20 +33,20 @@ import java.security.cert.X509Certificate;
 /* ------------------------------------------------------------ */
 /**
  * JSSE Socket Listener.
- * 
+ *
  * This specialization of HttpListener is an abstract listener that can be used as the basis for a
  * specific JSSE listener.
- * 
+ *
  * This is heavily based on the work from Court Demas, which in turn is based on the work from Forge
  * Research.
- * 
+ *
  * @deprecated use SslListener
- * 
+ *
  * @version $Id: JsseListener.java,v 1.19 2005/11/03 18:21:59 gregwilkins Exp $
  * @author Greg Wilkins (gregw@mortbay.com)
  * @author Court Demas (court@kiwiconsulting.com)
  * @author Forge Research Pty Ltd ACN 003 491 576
- * @author Jan Hlavatý
+ * @author Jan Hlavaty
  */
 public abstract class JsseListener extends SocketListener
 {
@@ -103,7 +103,7 @@ public abstract class JsseListener extends SocketListener
     /* ------------------------------------------------------------ */
     /**
      * Constructor.
-     * 
+     *
      * @param p_address
      */
     public JsseListener(InetAddrPort p_address)
@@ -120,7 +120,7 @@ public abstract class JsseListener extends SocketListener
     /* ------------------------------------------------------------ */
     /**
      * Set the value of the needClientAuth property
-     * 
+     *
      * @param needClientAuth true iff we require client certificate authentication.
      */
     public void setNeedClientAuth(boolean needClientAuth)
@@ -242,7 +242,7 @@ public abstract class JsseListener extends SocketListener
      * certificate in the chain is the one set by the client, the next is the one used to
      * authenticate the first, and so on. </li>
      * </ul>
-     * 
+     *
      * @param socket The Socket the request arrived on. This should be a javax.net.ssl.SSLSocket.
      * @param request HttpRequest to be customised.
      */
@@ -294,7 +294,7 @@ public abstract class JsseListener extends SocketListener
      * <p>
      * Note: in order to do this we must convert a javax.security.cert.X509Certificate[], as used by
      * JSSE to a java.security.cert.X509Certificate[],as required by the Servlet specs.
-     * 
+     *
      * @param sslSession the javax.net.ssl.SSLSession to use as the source of the cert chain.
      * @return the chain of java.security.cert.X509Certificates used to negotiate the SSL
      *         connection. <br>

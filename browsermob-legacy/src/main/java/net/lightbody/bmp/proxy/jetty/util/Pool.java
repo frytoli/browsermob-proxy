@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at 
+// You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,7 @@ import java.util.HashMap;
 /** A pool of Objects.
  * <p>
  * @version $Id: Pool.java,v 1.13 2005/08/13 00:01:28 gregwilkins Exp $
- * @author Juancarlo Añez <juancarlo@modelistica.com>
+ * @author Juancarlo Anez <juancarlo@modelistica.com>
  * @author Greg Wilkins <gregw@mortbay.com>
  */
 public class Pool
@@ -34,12 +34,12 @@ public class Pool
     private static Log log = LogFactory.getLog(Pool.class);
 
     /* ------------------------------------------------------------ */
-    static int __max = 
+    static int __max =
         Integer.getInteger("POOL_MAX",256).intValue();
     static int __min =
         Integer.getInteger("POOL_MIN",2).intValue();
 
-    
+
     /* ------------------------------------------------------------ */
     public static interface PondLife
     {
@@ -48,10 +48,10 @@ public class Pool
         void poolClosing();
         void leavePool();
     }
-    
+
     /* ------------------------------------------------------------------- */
     static HashMap __nameMap=new HashMap();
-    
+
     /* ------------------------------------------------------------------- */
     private int _max = __max;
     private int _min = __min;
@@ -59,7 +59,7 @@ public class Pool
     private String _className;
     private int _maxIdleTimeMs=10000;
     private HashMap _attributes = new HashMap();
-    
+
     private transient Class _class;
     private transient PondLife[] _pondLife; // Array of pondlife indexed by ID.
     private transient int[] _index; // Mapping of pondlife IDs.  Entries with indexes <_available are idle IDs.  Entries with indexes>_size are unused IDs.
@@ -67,7 +67,7 @@ public class Pool
     private transient int _available;
     private transient int _running=0;
     private transient long _lastShrink=0;  // control shrinking to once per maxIdleTime
-    
+
     /* ------------------------------------------------------------------- */
     public static Pool getPool(String name)
     {
@@ -77,11 +77,11 @@ public class Pool
     /* ------------------------------------------------------------------- */
     /* Construct
      */
-    public Pool() 
+    public Pool()
     {}
 
     /* ------------------------------------------------------------ */
-    /** 
+    /**
      * @return The name of the Pool.
      */
     public String getPoolName()
@@ -90,7 +90,7 @@ public class Pool
     }
 
     /* ------------------------------------------------------------ */
-    /** 
+    /**
      * @param name The pool name
      * @exception IllegalStateException If the name is already defined.
      */
@@ -106,12 +106,12 @@ public class Pool
                 if (__nameMap.containsKey(name))
                     throw new IllegalStateException("Name already exists");
                 _name=name;
-                
+
                 __nameMap.put(_name,this);
             }
         }
     }
-    
+
     /* ------------------------------------------------------------ */
     /** Set the class.
      * @param poolClass The class
@@ -134,7 +134,7 @@ public class Pool
             }
         }
     }
-    
+
 
     /* ------------------------------------------------------------ */
     public Class getPoolClass()
@@ -147,68 +147,68 @@ public class Pool
     {
         return _min;
     }
-    
+
     /* ------------------------------------------------------------ */
     public void setMinSize(int min)
     {
         _min=min;
     }
-    
+
     /* ------------------------------------------------------------ */
     public int getMaxSize()
     {
         return _max;
     }
-    
+
     /* ------------------------------------------------------------ */
     public void setMaxSize(int max)
     {
         _max=max;
     }
-    
+
     /* ------------------------------------------------------------ */
     public int getMaxIdleTimeMs()
     {
         return _maxIdleTimeMs;
     }
-    
+
     /* ------------------------------------------------------------ */
     public void setMaxIdleTimeMs(int maxIdleTimeMs)
     {
         _maxIdleTimeMs=maxIdleTimeMs;
     }
-    
+
     /* ------------------------------------------------------------ */
     public void setAttribute(String name,Object value)
     {
         _attributes.put(name,value);
     }
-    
+
     /* ------------------------------------------------------------ */
     public Object getAttribute(String name)
     {
         return _attributes.get(name);
     }
-    
+
     /* ------------------------------------------------------------ */
     public boolean isStarted()
     {
         return _running>0 && _pondLife!=null;
     }
-    
+
     /* ------------------------------------------------------------ */
     public int size()
     {
         return _size;
     }
-    
+
     /* ------------------------------------------------------------ */
     public int available()
     {
         return _available;
     }
-    
-    
+
+
     /* ------------------------------------------------------------ */
     public void start()
         throws Exception
@@ -227,7 +227,7 @@ public class Pool
             _index=new int[_max];
             _size=0;
             _available=0;
-            
+
             for (int i=0;i<_max;i++)
                 _index[i]=i;
             for (int i=0;i<_min;i++)
@@ -246,7 +246,7 @@ public class Pool
                 return;
             notifyAll();
         }
-        
+
         if (_pondLife!=null && _size>0)
         {
             for (int i=0;i<_pondLife.length;i++)
@@ -264,19 +264,19 @@ public class Pool
             _available=0;
         }
     }
-    
+
     /* ------------------------------------------------------------ */
     public PondLife get(int timeoutMs)
         throws Exception
     {
         PondLife pl=null;
-        
-        // Defer to other threads before locking 
+
+        // Defer to other threads before locking
         if (_available<_min)
             Thread.yield();
-        
+
         int new_id=-1;
-        
+
         // Try to get pondlife without creating new one.
         synchronized(this)
         {
@@ -307,14 +307,14 @@ public class Pool
 
         return pl;
     }
-    
-    
+
+
     /* ------------------------------------------------------------ */
     public void put(PondLife pl)
         throws InterruptedException
     {
         int id=pl.getID();
-        
+
         synchronized(this)
         {
             if (_running==0)
@@ -325,9 +325,9 @@ public class Pool
                 notify();
             }
         }
-        
+
     }
-    
+
     /* ------------------------------------------------------------ */
     public void shrink()
         throws InterruptedException
@@ -345,7 +345,7 @@ public class Pool
                     return; // don't shrink
                 _lastShrink=now;
             }
-            
+
             // shrink if we are running and have available threads and we are above minimal size
             if (_running>0 && _available>0 && _size>_min)
                 stopPondLife(_index[--_available]);
@@ -365,7 +365,7 @@ public class Pool
         }
         return id;
     }
-    
+
     /* ------------------------------------------------------------ */
     private PondLife newPondLife(int id)
         throws Exception
@@ -382,14 +382,14 @@ public class Pool
     {
         return newPondLife(reservePondLife(true));
     }
-    
+
     /* ------------------------------------------------------------ */
     private void closePondLife(int id)
     {
         if (_pondLife[id]!=null)
             _pondLife[id].poolClosing();
     }
-    
+
     /* ------------------------------------------------------------ */
     private void stopPondLife(int id)
     {
@@ -415,11 +415,11 @@ public class Pool
         StringBuffer pond=new StringBuffer();
         StringBuffer avail=new StringBuffer();
         StringBuffer index=new StringBuffer();
-        
+
          pond.append("pond: ");
          avail.append("avail:");
          index.append("index:");
-        
+
         for (int i=0;i<_pondLife.length;i++)
         {
             if (_pondLife[i]==null)
@@ -429,12 +429,12 @@ public class Pool
                 pond.append(' ');
                 StringUtil.append(pond,(byte)i,16);
             }
-            
+
             if (i==_size)
                 avail.append(i==_available?" AS":"  S");
             else
                 avail.append(i==_available?" A ":"   ");
-            
+
             index.append(' ');
             StringUtil.append(index,(byte)_index[i],16);
         }
@@ -445,8 +445,8 @@ public class Pool
         System.err.println(avail);
         System.err.println(index);
     }
-    
-    
+
+
     /* ------------------------------------------------------------ */
     private void readObject(java.io.ObjectInputStream in)
         throws java.io.IOException, ClassNotFoundException

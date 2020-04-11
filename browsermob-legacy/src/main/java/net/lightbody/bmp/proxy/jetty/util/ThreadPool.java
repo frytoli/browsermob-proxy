@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at 
+// You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,15 +24,15 @@ import java.io.Serializable;
  * <p>
  * Avoids the expense of thread creation by pooling threads after their run methods exit for reuse.
  * <p>
- * If the maximum pool size is reached, jobs wait for a free thread. 
+ * If the maximum pool size is reached, jobs wait for a free thread.
  * Idle threads timeout and terminate until the minimum number of threads are running.
  * <p>
  * This implementation uses the run(Object) method to place a job on a queue, which is read by the
  * getJob(timeout) method. Derived implementations may specialize getJob(timeout) to obtain jobs
  * from other sources without queing overheads.
- * 
+ *
  * @version $Id: ThreadPool.java,v 1.41 2005/08/13 00:01:28 gregwilkins Exp $
- * @author Juancarlo Aï¿½ez <juancarlo@modelistica.com>
+ * @author Juancarlo Anez <juancarlo@modelistica.com>
  * @author Greg Wilkins <gregw@mortbay.com>
  */
 public class ThreadPool implements LifeCycle,Serializable
@@ -41,7 +41,7 @@ public class ThreadPool implements LifeCycle,Serializable
     static private int __pool=0;
     public static final String __DAEMON="ThreadPool.daemon";
     public static final String __PRIORITY="ThreadPool.priority";
-    
+
     /* ------------------------------------------------------------------- */
     private Pool _pool;
     private Object _join="";
@@ -61,7 +61,7 @@ public class ThreadPool implements LifeCycle,Serializable
         {
             name+=__pool++;
         }
-        
+
         _pool=new Pool();
         _pool.setPoolClass(ThreadPool.PoolThread.class);
         setName(name);
@@ -82,7 +82,7 @@ public class ThreadPool implements LifeCycle,Serializable
      * instance. Thus they will share the same max, min and available Threads. The field values of
      * the first ThreadPool to call setPoolName with a specific name are used for the named Pool.
      * Subsequent ThreadPools that join the name pool will loose their private values.
-     * 
+     *
      * @param name Name of the Pool instance this ThreadPool uses or null for an anonymous private
      *                  pool.
      */
@@ -96,11 +96,11 @@ public class ThreadPool implements LifeCycle,Serializable
                     throw new IllegalStateException("started");
                 return;
             }
-            
+
             if(name==null)
             {
                 if(_pool.getPoolName()!=null)
-                {               
+                {
                     _pool=new Pool();
                     _pool.setPoolName(getName());
                 }
@@ -111,7 +111,7 @@ public class ThreadPool implements LifeCycle,Serializable
                 if(pool==null)
                     _pool.setPoolName(name);
                 else
-                    _pool=pool;       
+                    _pool=pool;
             }
         }
     }
@@ -155,7 +155,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Is the pool running jobs.
-     * 
+     *
      * @return True if start() has been called.
      */
     public boolean isStarted()
@@ -166,7 +166,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Get the number of threads in the pool. Delegated to the named or anonymous Pool.
-     * 
+     *
      * @see #getIdleThreads
      * @return Number of threads
      */
@@ -178,7 +178,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Get the number of idle threads in the pool. Delegated to the named or anonymous Pool.
-     * 
+     *
      * @see #getThreads
      * @return Number of threads
      */
@@ -190,7 +190,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Get the minimum number of threads. Delegated to the named or anonymous Pool.
-     * 
+     *
      * @see #setMinThreads
      * @return minimum number of threads.
      */
@@ -202,7 +202,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Set the minimum number of threads. Delegated to the named or anonymous Pool.
-     * 
+     *
      * @see #getMinThreads
      * @param minThreads minimum number of threads
      */
@@ -214,7 +214,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Set the maximum number of threads. Delegated to the named or anonymous Pool.
-     * 
+     *
      * @see #setMaxThreads
      * @return maximum number of threads.
      */
@@ -226,7 +226,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Set the maximum number of threads. Delegated to the named or anonymous Pool.
-     * 
+     *
      * @see #getMaxThreads
      * @param maxThreads maximum number of threads.
      */
@@ -238,7 +238,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Get the maximum thread idle time. Delegated to the named or anonymous Pool.
-     * 
+     *
      * @see #setMaxIdleTimeMs
      * @return Max idle time in ms.
      */
@@ -251,7 +251,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /**
      * Set the maximum thread idle time. Threads that are idle for longer than this period may be
      * stopped. Delegated to the named or anonymous Pool.
-     * 
+     *
      * @see #getMaxIdleTimeMs
      * @param maxIdleTimeMs Max idle time in ms.
      */
@@ -263,7 +263,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Get the priority of the pool threads.
-     * 
+     *
      * @return the priority of the pool threads.
      */
     public int getThreadsPriority()
@@ -280,7 +280,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Set the priority of the pool threads.
-     * 
+     *
      * @param priority the new thread priority.
      */
     public void setThreadsPriority(int priority)
@@ -291,7 +291,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Set Max Read Time.
-     * 
+     *
      * @deprecated maxIdleTime is used instead.
      */
     public void setMaxStopTimeMs(int ms)
@@ -355,7 +355,7 @@ public class ThreadPool implements LifeCycle,Serializable
     /* ------------------------------------------------------------ */
     /**
      * Run job. Give a job to the pool.
-     * 
+     *
      * @param job If the job is derived from Runnable, the run method is called, otherwise it is
      *                  passed as the argument to the handle method.
      */
@@ -389,7 +389,7 @@ public class ThreadPool implements LifeCycle,Serializable
      * Handle a job. Called by the allocated thread to handle a job. If the job is a Runnable, it's
      * run method is called. Otherwise this method needs to be specialized by a derived class to
      * provide specific handling.
-     * 
+     *
      * @param job The job to execute.
      * @exception InterruptedException
      */
@@ -406,7 +406,7 @@ public class ThreadPool implements LifeCycle,Serializable
      * Stop a Job. This method is called by the Pool if a job needs to be stopped. The default
      * implementation does nothing and should be extended by a derived thread pool class if special
      * action is required.
-     * 
+     *
      * @param thread The thread allocated to the job, or null if no thread allocated.
      * @param job The job object passed to run.
      */
@@ -482,7 +482,7 @@ public class ThreadPool implements LifeCycle,Serializable
                     _job=null;
                     _jobPool=null;
                 }
-                
+
                 if(_run!=null&&_runPool!=null)
                 {
                     _runPool.stopJob(this,_run);
@@ -528,7 +528,7 @@ public class ThreadPool implements LifeCycle,Serializable
                             _jobPool=null;
                         }
                     }
-                    
+
                     // handle outside of sync
                     if(run!=null && runPool!=null)
                         runPool.handle(run);

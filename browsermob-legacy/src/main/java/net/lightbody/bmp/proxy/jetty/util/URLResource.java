@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at 
+// You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,7 @@ import java.security.Permission;
 /** Abstract resource class.
  *
  * @version $Id: URLResource.java,v 1.9 2005/08/13 00:01:28 gregwilkins Exp $
- * @author Nuno Preguiça
+ * @author Nuno Preguica
  * @author Greg Wilkins (gregw)
  */
 public class URLResource extends Resource
@@ -41,7 +41,7 @@ public class URLResource extends Resource
     protected String _urlString;
     protected transient URLConnection _connection;
     protected transient InputStream _in=null;
-    
+
     /* ------------------------------------------------------------ */
     protected URLResource(URL url, URLConnection connection)
     {
@@ -167,7 +167,7 @@ public class URLResource extends Resource
         catch(Exception e) {LogSupport.ignore(log,e);}
 
         // Don't know the file
-        return null;    
+        return null;
     }
 
     /* ------------------------------------------------------------ */
@@ -190,7 +190,7 @@ public class URLResource extends Resource
             throw new IOException( "Invalid resource");
 
         try
-        {    
+        {
             if( _in != null)
             {
                 InputStream in = _in;
@@ -272,7 +272,7 @@ public class URLResource extends Resource
     {
         return _url.hashCode();
     }
-    
+
     /* ------------------------------------------------------------ */
     public boolean equals( Object o)
     {

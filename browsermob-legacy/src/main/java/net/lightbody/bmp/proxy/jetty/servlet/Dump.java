@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at 
+// You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ import java.util.Locale;
 
 /* ------------------------------------------------------------ */
 /** Dump Servlet Request.
- * 
+ *
  */
 public class Dump extends HttpServlet
 {
@@ -60,7 +60,7 @@ public class Dump extends HttpServlet
         request.setAttribute("Dump", this);
         request.setCharacterEncoding("ISO_8859_1");
         getServletContext().setAttribute("Dump",this);
-        
+
         String info= request.getPathInfo();
         if (info != null && info.endsWith("Exception"))
         {
@@ -327,7 +327,7 @@ public class Dump extends HttpServlet
                 table.addHeading(cookie.getName() + ":&nbsp;").cell().attribute("VALIGN", "TOP").right();
                 table.addCell(cookie.getValue());
             }
-            
+
             /* ------------------------------------------------------------ */
             table.newRow();
             table
@@ -344,7 +344,7 @@ public class Dump extends HttpServlet
                 table.newRow();
                 table.addHeading(name + ":&nbsp;").cell().attribute("VALIGN", "TOP").right();
                 table.addCell("<pre>" + toString(request.getAttribute(name)) + "</pre>");
-            }            
+            }
 
             /* ------------------------------------------------------------ */
             table.newRow();
@@ -451,7 +451,7 @@ public class Dump extends HttpServlet
                 try{table.addCell("" + getServletContext().getResource(res));}
                 catch(Exception e) {table.addCell("" +e);}
             }
-            
+
 
             /* ------------------------------------------------------------ */
             page.add(Break.para);
@@ -468,10 +468,10 @@ public class Dump extends HttpServlet
                 else
                     rw=null;
             }
-            
+
             page.add(Break.para);
             page.add(new Heading(1, "International Characters"));
-            page.add("Directly encoced:  DÃ¼rst<br/>");
+            //page.add("Directly encoced:  DÃ¼rst<br/>");
             page.add("HTML reference: D&uuml;rst<br/>");
             page.add("Decimal (252) 8859-1: D&#252;rst<br/>");
             page.add("Hex (xFC) 8859-1: D&#xFC;rst<br/>");

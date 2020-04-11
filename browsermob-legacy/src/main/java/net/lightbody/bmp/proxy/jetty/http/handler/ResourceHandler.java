@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at 
+// You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,9 +33,9 @@ import java.util.List;
  * IfModifiedSince and IfUnmodifiedSince header fields.
  * A simple memory cache is also provided to reduce file I/O.
  * HTTP/1.1 ranges are supported.
- * 
+ *
  * @version $Id: ResourceHandler.java,v 1.66 2005/08/24 08:18:17 gregwilkins Exp $
- * @author Nuno Preguiça
+ * @author Nuno Preguica
  * @author Greg Wilkins
  */
 public class ResourceHandler extends AbstractHttpHandler
@@ -67,14 +67,14 @@ public class ResourceHandler extends AbstractHttpHandler
     public ResourceHandler()
     {}
 
- 
+
     /* ----------------------------------------------------------------- */
     public synchronized void start()
         throws Exception
-    {        
+    {
         super.start();
     }
- 
+
     /* ----------------------------------------------------------------- */
     public void stop()
         throws InterruptedException
@@ -115,44 +115,44 @@ public class ResourceHandler extends AbstractHttpHandler
     {
         return _allowed;
     }
-    
+
     /* ------------------------------------------------------------ */
     public boolean isDirAllowed()
     {
         return _dirAllowed;
     }
-    
+
     /* ------------------------------------------------------------ */
     public void setDirAllowed(boolean dirAllowed)
     {
         _dirAllowed = dirAllowed;
     }
-    
+
     /* ------------------------------------------------------------ */
     public boolean isAcceptRanges()
     {
         return _acceptRanges;
     }
-    
+
     /* ------------------------------------------------------------ */
-    /** 
+    /**
      * @return True if welcome files are redirected to. False if forward is used.
      */
     public boolean getRedirectWelcome()
     {
         return _redirectWelcomeFiles;
     }
-    
+
     /* ------------------------------------------------------------ */
-    /** 
+    /**
      * @param redirectWelcome True if welcome files are redirected to. False
-     * if forward is used. 
+     * if forward is used.
      */
     public void setRedirectWelcome(boolean redirectWelcome)
     {
         _redirectWelcomeFiles = redirectWelcome;
     }
-    
+
     /* ------------------------------------------------------------ */
     /** Set if the handler accepts range requests.
      * Default is false;
@@ -162,7 +162,7 @@ public class ResourceHandler extends AbstractHttpHandler
     {
         _acceptRanges=ar;
     }
-    
+
     /* ------------------------------------------------------------ */
     /** Get minimum content length for GZIP encoding.
      * @return Minimum length of content for gzip encoding or -1 if disabled.
@@ -171,7 +171,7 @@ public class ResourceHandler extends AbstractHttpHandler
     {
         return _minGzipLength;
     }
-    
+
     /* ------------------------------------------------------------ */
     /** Set minimum content length for GZIP encoding.
      * @param minGzipLength If set to a positive integer, then static content
@@ -183,7 +183,7 @@ public class ResourceHandler extends AbstractHttpHandler
         _minGzipLength = minGzipLength;
     }
 
-    
+
     /* ------------------------------------------------------------ */
     /** get Resource to serve.
      * Map a path to a resource. The default implementation calls
@@ -197,7 +197,7 @@ public class ResourceHandler extends AbstractHttpHandler
     {
         return getHttpContext().getResource(pathInContext);
     }
-    
+
     /* ------------------------------------------------------------ */
     public void handle(String pathInContext,
                        String pathParams,
@@ -225,13 +225,13 @@ public class ResourceHandler extends AbstractHttpHandler
         try
         {
             if(log.isDebugEnabled())log.debug("PATH="+pathInContext+" RESOURCE="+resource);
-            
+
             // check filename
             String method=request.getMethod();
             if (method.equals(HttpRequest.__GET) ||
                 method.equals(HttpRequest.__POST) ||
                 method.equals(HttpRequest.__HEAD))
-                handleGet(request, response, pathInContext, pathParams, resource);  
+                handleGet(request, response, pathInContext, pathParams, resource);
             else if (method.equals(HttpRequest.__PUT))
                 handlePut(request, response, pathInContext, resource);
             else if (method.equals(HttpRequest.__DELETE))
@@ -273,16 +273,16 @@ public class ResourceHandler extends AbstractHttpHandler
         throws IOException
     {
         if(log.isDebugEnabled())log.debug("Looking for "+resource);
-        
+
         if (resource!=null && resource.exists())
-        {            
+        {
             // check if directory
             if (resource.isDirectory())
             {
                 if (!pathInContext.endsWith("/") && !pathInContext.equals("/"))
                 {
                     log.debug("Redirect to directory/");
-                    
+
                     String q=request.getQuery();
                     StringBuffer buf=request.getRequestURL();
                     if (q!=null&&q.length()!=0)
@@ -295,11 +295,11 @@ public class ResourceHandler extends AbstractHttpHandler
                     request.setHandled(true);
                     return;
                 }
-  
+
                 // See if index file exists
                 String welcome=getHttpContext().getWelcomeFile(resource);
                 if (welcome!=null)
-                {     
+                {
                     // Forward to the index
                     String ipath=URI.addPaths(pathInContext,welcome);
                     if (_redirectWelcomeFiles)
@@ -338,7 +338,7 @@ public class ResourceHandler extends AbstractHttpHandler
         }
     }
 
- 
+
     /* ------------------------------------------------------------ */
     /* Check modification date headers.
      */
@@ -366,10 +366,10 @@ public class ResourceHandler extends AbstractHttpHandler
                 }
             }
 
-            
+
             long date=0;
             // Parse the if[un]modified dates and compare to resource
-            
+
             if ((date=request.getDateField(HttpFields.__IfUnmodifiedSince))>0)
             {
                 if (resource.lastModified()/1000 > date/1000)
@@ -378,10 +378,10 @@ public class ResourceHandler extends AbstractHttpHandler
                     return false;
                 }
             }
-            
+
             if ((date=request.getDateField(HttpFields.__IfModifiedSince))>0)
             {
-                
+
                 if (resource.lastModified()/1000 <= date/1000)
                 {
                     response.setStatus(HttpResponse.__304_Not_Modified);
@@ -389,12 +389,12 @@ public class ResourceHandler extends AbstractHttpHandler
                     return false;
                 }
             }
-   
+
         }
         return true;
     }
- 
- 
+
+
     /* ------------------------------------------------------------ */
     void handlePut(HttpRequest request,
                    HttpResponse response,
@@ -408,7 +408,7 @@ public class ResourceHandler extends AbstractHttpHandler
         if (exists &&
             !passConditionalHeaders(request,response,resource))
             return;
-        
+
         if (pathInContext.endsWith("/"))
         {
             if (!exists)
@@ -463,12 +463,12 @@ public class ResourceHandler extends AbstractHttpHandler
                       Resource resource)
         throws IOException
     {
-        if(log.isDebugEnabled())log.debug("DELETE "+pathInContext+" from "+resource);  
- 
+        if(log.isDebugEnabled())log.debug("DELETE "+pathInContext+" from "+resource);
+
         if (!resource.exists() ||
             !passConditionalHeaders(request,response,resource))
             return;
- 
+
         try
         {
             // delete the file
@@ -487,7 +487,7 @@ public class ResourceHandler extends AbstractHttpHandler
         }
     }
 
- 
+
     /* ------------------------------------------------------------ */
     void handleMove(HttpRequest request,
                     HttpResponse response,
@@ -498,7 +498,7 @@ public class ResourceHandler extends AbstractHttpHandler
         if (!resource.exists() || !passConditionalHeaders(request,response,resource))
             return;
 
- 
+
         String newPath = URI.canonicalPath(request.getField("New-uri"));
         if (newPath==null)
         {
@@ -514,7 +514,7 @@ public class ResourceHandler extends AbstractHttpHandler
                                "Not in context");
             return;
         }
-        
+
 
         // Find path
         try
@@ -524,10 +524,10 @@ public class ResourceHandler extends AbstractHttpHandler
             if (contextPath!=null)
                 newInfo=newInfo.substring(contextPath.length());
             Resource newFile = getHttpContext().getBaseResource().addPath(newInfo);
-     
+
             if(log.isDebugEnabled())log.debug("Moving "+resource+" to "+newFile);
             resource.renameTo(newFile);
-    
+
             response.setStatus(HttpResponse.__204_No_Content);
             request.setHandled(true);
         }
@@ -540,7 +540,7 @@ public class ResourceHandler extends AbstractHttpHandler
             return;
         }
     }
- 
+
     /* ------------------------------------------------------------ */
     void handleOptions(HttpResponse response, String pathInContext)
         throws IOException
@@ -550,13 +550,13 @@ public class ResourceHandler extends AbstractHttpHandler
         setAllowHeader(response);
         response.commit();
     }
- 
+
     /* ------------------------------------------------------------ */
     void setAllowHeader(HttpResponse response)
     {
         response.setField(HttpFields.__Allow, getAllowedString());
     }
-    
+
     /* ------------------------------------------------------------ */
     public void writeHeaders(HttpResponse response,Resource resource, long count)
         throws IOException
@@ -574,7 +574,7 @@ public class ResourceHandler extends AbstractHttpHandler
         }
 
         response.setField(HttpFields.__LastModified,metaData.getLastModified());
-        
+
         if (_acceptRanges && response.getHttpRequest().getDotVersion()>0)
             response.setField(HttpFields.__AcceptRanges,"bytes");
     }
@@ -588,13 +588,13 @@ public class ResourceHandler extends AbstractHttpHandler
         throws IOException
     {
         long resLength=resource.length();
-        
+
         //  see if there are any range headers
         Enumeration reqRanges =
             request.getDotVersion()>0
             ?request.getFieldValues(HttpFields.__Range)
             :null;
-        
+
         if (!writeHeaders || reqRanges == null || !reqRanges.hasMoreElements())
         {
             // look for a gziped content.
@@ -616,17 +616,17 @@ public class ResourceHandler extends AbstractHttpHandler
                 }
             }
             writeHeaders(response,resource,resLength);
-            
+
             request.setHandled(true);
             OutputStream out = response.getOutputStream();
             data.writeTo(out,0,resLength);
             return;
         }
-            
+
         // Parse the satisfiable ranges
         List ranges =InclusiveByteRange.satisfiableRanges(reqRanges,resLength);
         if(log.isDebugEnabled())log.debug("ranges: " + reqRanges + " == " + ranges);
-        
+
         //  if there are no satisfiable ranges, send 416 response
         if (ranges==null || ranges.size()==0)
         {
@@ -636,17 +636,17 @@ public class ResourceHandler extends AbstractHttpHandler
             response.setReason((String)HttpResponse.__statusMsg
                                .get(TypeUtil.newInteger(HttpResponse.__416_Requested_Range_Not_Satisfiable)));
 
-            response.setField(HttpFields.__ContentRange, 
+            response.setField(HttpFields.__ContentRange,
                               InclusiveByteRange.to416HeaderRangeString(resLength));
-            
+
             OutputStream out = response.getOutputStream();
             resource.writeTo(out,0,resLength);
             request.setHandled(true);
             return;
         }
 
-        
-        //  if there is only a single valid range (must be satisfiable 
+
+        //  if there is only a single valid range (must be satisfiable
         //  since were here now), send that range with a 216 response
         if ( ranges.size()== 1)
         {
@@ -658,19 +658,19 @@ public class ResourceHandler extends AbstractHttpHandler
             response.setStatus(HttpResponse.__206_Partial_Content);
             response.setReason((String)HttpResponse.__statusMsg
                                .get(TypeUtil.newInteger(HttpResponse.__206_Partial_Content)));
-            response.setField(HttpFields.__ContentRange, 
+            response.setField(HttpFields.__ContentRange,
                               singleSatisfiableRange.toHeaderRangeString(resLength));
             OutputStream out = response.getOutputStream();
             resource.writeTo(out,
-                             singleSatisfiableRange.getFirst(resLength), 
+                             singleSatisfiableRange.getFirst(resLength),
                              singleLength);
             request.setHandled(true);
             return;
         }
 
-        
+
         //  multiple non-overlapping valid ranges cause a multipart
-        //  216 response which does not require an overall 
+        //  216 response which does not require an overall
         //  content-length header
         //
         ResourceCache.ResourceMetaData metaData =
@@ -695,7 +695,7 @@ public class ResourceHandler extends AbstractHttpHandler
             ?null:resource.getInputStream();
         OutputStream out = response.getOutputStream();
         long pos=0;
-            
+
         for (int i=0;i<ranges.size();i++)
         {
             InclusiveByteRange ibr = (InclusiveByteRange) ranges.get(i);
@@ -726,7 +726,7 @@ public class ResourceHandler extends AbstractHttpHandler
             else
                 // Handle cached resource
                 resource.writeTo(out,start,size);
-            
+
         }
         if (in!=null)
             in.close();
@@ -750,14 +750,14 @@ public class ResourceHandler extends AbstractHttpHandler
             response.sendError(HttpResponse.__403_Forbidden);
             return;
         }
-        
+
         request.setHandled(true);
-        
+
         if(log.isDebugEnabled())log.debug("sendDirectory: "+resource);
         byte[] data=null;
         if (resource instanceof CachedResource)
             data=((CachedResource)resource).getCachedData();
-        
+
         if (data==null)
         {
             String base = URI.addPaths(request.getPath(),"/");
@@ -772,20 +772,17 @@ public class ResourceHandler extends AbstractHttpHandler
             if (resource instanceof CachedResource)
                 ((CachedResource)resource).setCachedData(data);
         }
-        
+
         response.setContentType("text/html; charset=UTF8");
         response.setContentLength(data.length);
-        
+
         if (request.getMethod().equals(HttpRequest.__HEAD))
         {
             response.commit();
             return;
         }
-        
+
         response.getOutputStream().write(data,0,data.length);
         response.commit();
     }
 }
-
-
-
