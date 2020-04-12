@@ -320,7 +320,7 @@ public interface BrowserMobProxy {
      * @param password the password to use to authenticate with the chained proxy
      * @param authType the auth type to use (currently, must be BASIC)
      */
-    void chainedProxyAuthorization(String username, String password, AuthType authType);
+    //void chainedProxyAuthorization(String username, String password, AuthType authType);
 
     /**
      * Adds a rewrite rule for the specified URL-matching regular expression. If there are any existing rewrite rules, the new rewrite

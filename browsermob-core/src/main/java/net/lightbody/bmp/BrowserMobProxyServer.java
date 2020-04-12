@@ -362,36 +362,61 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                     final String upstreamUsername = upstreamProxyUsername;
                     final String upstreamPassword = upstreamProxyPassword;
                     if ((upstreamProxy != null) && (upstreamType != null)) {
-                        chainedProxies.add(new ChainedProxyAdapter() {
-                            @Override
-                            public ChainedProxyType getChainedProxyType() {
-                                return upstreamType;
-                            }
-                            @Override
-                            public InetSocketAddress getChainedProxyAddress() {
-                                return upstreamProxy;
-                            }
-                            @Override
-                            public String getUsername() {
-                                return upstreamUsername;
-                            }
-                            @Override
-                            public String getPassword() {
-                                return upstreamPassword;
-                            }
+                        if ((upstreamUsername != null) && (upstreamPassword != null)) {
+                          chainedProxies.add(new ChainedProxyAdapter() {
+                              @Override
+                              public ChainedProxyType getChainedProxyType() {
+                                  return upstreamType;
+                              }
+                              @Override
+                              public InetSocketAddress getChainedProxyAddress() {
+                                  return upstreamProxy;
+                              }
+                              @Override
+                              public String getUsername() {
+                                  return upstreamUsername;
+                              }
+                              @Override
+                              public String getPassword() {
+                                  return upstreamPassword;
+                              }
 
-                            /*
-                            @Override
-                            public void filterRequest(HttpObject httpObject) {
-                                String chainedProxyAuth = chainedProxyCredentials;
-                                if (chainedProxyAuth != null) {
-                                    if (httpObject instanceof HttpRequest) {
-                                        HttpHeaders.addHeader((HttpRequest)httpObject, HttpHeaders.Names.PROXY_AUTHORIZATION, "Basic " + chainedProxyAuth);
-                                    }
-                                }
-                            }
-                            */
-                        });
+                              /*
+                              @Override
+                              public void filterRequest(HttpObject httpObject) {
+                                  String chainedProxyAuth = chainedProxyCredentials;
+                                  if (chainedProxyAuth != null) {
+                                      if (httpObject instanceof HttpRequest) {
+                                          HttpHeaders.addHeader((HttpRequest)httpObject, HttpHeaders.Names.PROXY_AUTHORIZATION, "Basic " + chainedProxyAuth);
+                                      }
+                                  }
+                              }
+                              */
+                           });
+                        } else {
+                          chainedProxies.add(new ChainedProxyAdapter() {
+                              @Override
+                              public ChainedProxyType getChainedProxyType() {
+                                  return upstreamType;
+                              }
+                              @Override
+                              public InetSocketAddress getChainedProxyAddress() {
+                                  return upstreamProxy;
+                              }
+
+                              /*
+                              @Override
+                              public void filterRequest(HttpObject httpObject) {
+                                  String chainedProxyAuth = chainedProxyCredentials;
+                                  if (chainedProxyAuth != null) {
+                                      if (httpObject instanceof HttpRequest) {
+                                          HttpHeaders.addHeader((HttpRequest)httpObject, HttpHeaders.Names.PROXY_AUTHORIZATION, "Basic " + chainedProxyAuth);
+                                      }
+                                  }
+                              }
+                              */
+                           });
+                        }
                     }
                 }
             });
