@@ -501,12 +501,14 @@ public class BrowserMobProxyServerLegacyAdapter extends BrowserMobProxyServer im
 
         String proxyType = options.get("proxyType");
         String proxyAddress = options.get("proxyAddress");
+        String proxyUsername = options.get("proxyUsername");
+        String proxyPassword = options.get("proxyPassword");
 
         if ((proxyType != null) && (proxyAddress != null)) {
             log.warn("Chained proxy support through setOptions is deprecated. Use setUpstreamProxy() to enable chained proxy support.");
 
             HostAndPort hostAndPort = HostAndPort.fromString(proxyAddress);
-            this.setChainedProxy(proxyType, new InetSocketAddress(hostAndPort.getHost(), hostAndPort.getPortOrDefault(80)));
+            this.setChainedProxy(proxyType, new InetSocketAddress(hostAndPort.getHost(), hostAndPort.getPortOrDefault(80)), proxyUsername, proxyPassword);
         } else {
             if (errorOnUnsupportedOperation) {
                 throw new UnsupportedOperationException("The LittleProxy-based implementation of BrowserMob Proxy does not support the setOptions method. Use the methods defined in the BrowserMobProxy interface to set connection parameters.");

@@ -558,7 +558,7 @@ public interface BrowserMobProxy {
      *
      * @param chainedProxyAddress address of the upstream proxy
      */
-    void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress);
+    void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress, String chainedProxyUsername, String chainedProxyPassword);
 
     /**
      * Returns the address and port of the upstream proxy.

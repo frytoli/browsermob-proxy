@@ -100,6 +100,8 @@ public class ProxyServer implements LegacyProxyServer, BrowserMobProxy {
 
     private InetSocketAddress chainedProxyAddress;
     private String chainedProxyType;
+    private String chainedProxyUsername;
+    private String chainedProxyPassword;
 
     public ProxyServer() {
     }
@@ -830,9 +832,11 @@ public class ProxyServer implements LegacyProxyServer, BrowserMobProxy {
     }
 
     @Override
-    public void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress) {
+    public void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress, String chainedProxyUsername, String chainedProxyPassword) {
         this.chainedProxyAddress = chainedProxyAddress;
         this.chainedProxyType = chainedProxyType;
+        this.chainedProxyUsername = chainedProxyUsername;
+        this.chainedProxyPassword = chainedProxyPassword;
         client.setHttpProxy(chainedProxyAddress.getHostString() + ":" + chainedProxyAddress.getPort());
     }
 

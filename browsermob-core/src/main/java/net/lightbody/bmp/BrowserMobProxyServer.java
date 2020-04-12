@@ -216,6 +216,16 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
      */
      private volatile ChainedProxyType upstreamProxyType;
 
+     /**
+      * The username for upstream chained authentication.
+      */
+      private volatile String upstreamProxyUsername;
+
+      /**
+       * The username for upstream chained authentication.
+       */
+       private volatile String upstreamProxyPassword;
+
     /**
      * The chained proxy manager that manages upstream proxies.
      */
@@ -264,7 +274,7 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
     /**
      * Base64-encoded credentials to use to authenticate with the upstream proxy.
      */
-    private volatile String chainedProxyCredentials;
+    //private volatile String chainedProxyCredentials;
 
     public BrowserMobProxyServer() {
     }
@@ -349,16 +359,28 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                 public void lookupChainedProxies(HttpRequest httpRequest, Queue<ChainedProxy> chainedProxies, ClientDetails clientDetails) {
                     final InetSocketAddress upstreamProxy = upstreamProxyAddress;
                     final ChainedProxyType upstreamType = upstreamProxyType;
+                    final String upstreamUsername = upstreamProxyUsername;
+                    final String upstreamPassword = upstreamProxyPassword;
                     if ((upstreamProxy != null) && (upstreamType != null)) {
                         chainedProxies.add(new ChainedProxyAdapter() {
                             @Override
                             public ChainedProxyType getChainedProxyType() {
                                 return upstreamType;
                             }
+                            @Override
                             public InetSocketAddress getChainedProxyAddress() {
                                 return upstreamProxy;
                             }
+                            @Override
+                            public String getUsername() {
+                                return upstreamUsername;
+                            }
+                            @Override
+                            public String getPassword() {
+                                return upstreamPassword;
+                            }
 
+                            /*
                             @Override
                             public void filterRequest(HttpObject httpObject) {
                                 String chainedProxyAuth = chainedProxyCredentials;
@@ -368,6 +390,7 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                                     }
                                 }
                             }
+                            */
                         });
                     }
                 }
@@ -669,6 +692,7 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
         basicAuthCredentials.remove(domain);
     }
 
+    /*
     @Override
     public void chainedProxyAuthorization(String username, String password, AuthType authType) {
         switch (authType) {
@@ -680,6 +704,7 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                 throw new UnsupportedOperationException("AuthType " + authType + " is not supported for Proxy Authorization");
         }
     }
+    */
 
     @Override
     public void setConnectTimeout(int connectTimeout, TimeUnit timeUnit) {
@@ -885,9 +910,11 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
      *
      * @param upstreamProxyType type of the upstream proxy (HTTP, SOCKS4, SOCKS5)
      * @param chainedProxyAddress address of the upstream proxy
+     * @param chainedProxyUsername username for upstream proxy auth
+     * @param chainedProxyPassword password for upstream proxy auth
      */
     @Override
-    public void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress) {
+    public void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress, String chainedProxyUsername, String chainedProxyPassword) {
         if (isStarted() && !bootstrappedWithDefaultChainedProxy.get()) {
             throw new IllegalStateException("Cannot set a chained proxy after the proxy is started if the proxy was started without a chained proxy.");
         }
@@ -906,6 +933,11 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                 break;
             default:
                 break;
+        }
+
+        if ((chainedProxyUsername != null) && (chainedProxyPassword != null)) {
+            upstreamProxyUsername = chainedProxyUsername;
+            upstreamProxyPassword = chainedProxyPassword;
         }
     }
 
