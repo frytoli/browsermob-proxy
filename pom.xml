@@ -73,9 +73,9 @@
         <groovy.version>2.4.12</groovy.version>
         <groovy-eclipse-batch.version>2.4.3-01</groovy-eclipse-batch.version>
 
-        <netty.version>4.0.51.Final</netty.version>
+        <netty.version>4.1.41.Final</netty.version>
         <!-- netty 4.1 version to use for browsermob-dist and when using the netty-4.1 profile -->
-        <netty-4.1.version>4.1.15.Final</netty-4.1.version>
+        <netty-4.1.version>4.1.41.Final</netty-4.1.version>
 
         <bouncycastle.version>1.58</bouncycastle.version>
     </properties>
@@ -279,7 +279,7 @@
             <dependency>
                 <groupId>org.mock-server</groupId>
                 <artifactId>mockserver-netty</artifactId>
-                <version>3.10.4</version>
+                <version>5.6.1</version>
                 <exclusions>
                     <exclusion>
                         <groupId>ch.qos.logback</groupId>

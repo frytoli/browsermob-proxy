@@ -49,6 +49,7 @@ import org.littleshoot.proxy.ChainedProxy;
 import org.littleshoot.proxy.ChainedProxyAdapter;
 import org.littleshoot.proxy.ChainedProxyManager;
 import org.littleshoot.proxy.ChainedProxyType;
+import org.littleshoot.proxy.ProxyAuthenticator;
 import org.littleshoot.proxy.HttpFilters;
 import org.littleshoot.proxy.HttpFiltersSource;
 import org.littleshoot.proxy.HttpFiltersSourceAdapter;
@@ -216,15 +217,15 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
      */
      private volatile ChainedProxyType upstreamProxyType;
 
-     /**
-      * The username for upstream chained authentication.
-      */
-      private volatile String upstreamProxyUsername;
+   /**
+    * The username for upstream chained authentication.
+    */
+    private volatile String upstreamProxyUsername;
 
-      /**
-       * The username for upstream chained authentication.
-       */
-       private volatile String upstreamProxyPassword;
+    /**
+     * The password for upstream chained authentication.
+     */
+     private volatile String upstreamProxyPassword;
 
     /**
      * The chained proxy manager that manages upstream proxies.
@@ -270,11 +271,6 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
     private final ConcurrentMap<String, String> basicAuthCredentials = new MapMaker()
             .concurrencyLevel(1)
             .makeMap();
-
-    /**
-     * Base64-encoded credentials to use to authenticate with the upstream proxy.
-     */
-    //private volatile String chainedProxyCredentials;
 
     public BrowserMobProxyServer() {
     }
@@ -380,18 +376,6 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                               public String getPassword() {
                                   return upstreamPassword;
                               }
-
-                              /*
-                              @Override
-                              public void filterRequest(HttpObject httpObject) {
-                                  String chainedProxyAuth = chainedProxyCredentials;
-                                  if (chainedProxyAuth != null) {
-                                      if (httpObject instanceof HttpRequest) {
-                                          HttpHeaders.addHeader((HttpRequest)httpObject, HttpHeaders.Names.PROXY_AUTHORIZATION, "Basic " + chainedProxyAuth);
-                                      }
-                                  }
-                              }
-                              */
                            });
                         } else {
                           chainedProxies.add(new ChainedProxyAdapter() {
@@ -403,18 +387,6 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
                               public InetSocketAddress getChainedProxyAddress() {
                                   return upstreamProxy;
                               }
-
-                              /*
-                              @Override
-                              public void filterRequest(HttpObject httpObject) {
-                                  String chainedProxyAuth = chainedProxyCredentials;
-                                  if (chainedProxyAuth != null) {
-                                      if (httpObject instanceof HttpRequest) {
-                                          HttpHeaders.addHeader((HttpRequest)httpObject, HttpHeaders.Names.PROXY_AUTHORIZATION, "Basic " + chainedProxyAuth);
-                                      }
-                                  }
-                              }
-                              */
                            });
                         }
                     }
@@ -717,20 +689,6 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
         basicAuthCredentials.remove(domain);
     }
 
-    /*
-    @Override
-    public void chainedProxyAuthorization(String username, String password, AuthType authType) {
-        switch (authType) {
-            case BASIC:
-                chainedProxyCredentials = BrowserMobHttpUtil.base64EncodeBasicCredentials(username, password);
-                break;
-
-            default:
-                throw new UnsupportedOperationException("AuthType " + authType + " is not supported for Proxy Authorization");
-        }
-    }
-    */
-
     @Override
     public void setConnectTimeout(int connectTimeout, TimeUnit timeUnit) {
         this.connectTimeoutMs = (int) TimeUnit.MILLISECONDS.convert(connectTimeout, timeUnit);
@@ -934,9 +892,9 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
      * proxy must be set before the proxy is started, though it can be changed after the proxy is started.
      *
      * @param upstreamProxyType type of the upstream proxy (HTTP, SOCKS4, SOCKS5)
-     * @param chainedProxyAddress address of the upstream proxy
-     * @param chainedProxyUsername username for upstream proxy auth
-     * @param chainedProxyPassword password for upstream proxy auth
+     * @param upstreamProxyAddress address of the upstream proxy
+     * @param upstreamProxyUsername username for upstream proxy auth
+     * @param upstreamProxyPassword password for upstream proxy auth
      */
     @Override
     public void setChainedProxy(String chainedProxyType, InetSocketAddress chainedProxyAddress, String chainedProxyUsername, String chainedProxyPassword) {
